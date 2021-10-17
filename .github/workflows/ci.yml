@@ -1,0 +1,36 @@
+name: MATLAB CI test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup MATLAB
+        uses: matlab-actions/setup-matlab@v0
+
+      - name: Generate graph
+        uses: matlab-actions/run-command@v0
+        with:
+          command: addpath('code'); dummy_plot()
+
+      - name: Archive graph
+        uses: actions/upload-artifact@v2
+        with:
+          name: Dummy-plot
+          path: barchart.png
+
+      # - name: Deploy
+      #  uses: peaceiris/actions-gh-pages@v3
+      #    with:
+      #        github_token: ${{ secrets.GITHUB_TOKEN }}
+      #            publish_dir: ./docs
